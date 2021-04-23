@@ -2,7 +2,7 @@ import { Route, HashRouter as Router, Link, useParams } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React, {useEffect, useState} from 'react';
 import videos from "./videos.js";
-import './App.css';
+import './sorted.css';
 
 
 import {Container, Row, Col} from 'react-bootstrap';
@@ -85,9 +85,36 @@ const SortedTag = () => {
     return sorted;
   }
 
+  const formatDate = (date) => {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+  const msToTime = (duration) => {
+    let milliseconds = Math.floor((duration % 1000) / 100),
+      seconds = Math.floor((duration / 1000) % 60),
+      minutes = Math.floor((duration / (1000 * 60)) % 60),
+      hours = Math.floor((duration / (1000 * 60 * 60)) % 24);
+
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+    return hours + ":" + minutes + ":" + seconds;
+  }
+
   return (
     <div className="App" data-test="component-app">
-      <Container>
+      <Container className="categories">
         <Row>
           {
             categories().map((category,index)=>
@@ -112,8 +139,8 @@ const SortedTag = () => {
         {
           sort(tag).map((video,index) =>
           <Col>
-            <Card key={index+"c"} style={{ width: '18rem' }}>
-              <Card.Img variant="top" src={video.thumbnail} />
+            <Card key={index+"c"} style={{ width: '18rem' }} className="cards">
+              <Card.Img variant="top" src={video.thumbnail} className="images"/>
               <Card.Body>
                 <Card.Title>{video.name}</Card.Title>
                 <Card.Text>
@@ -121,9 +148,9 @@ const SortedTag = () => {
                 </Card.Text>
               </Card.Body>
               <ListGroup className="list-group-flush">
-                <ListGroupItem>Category: {video.category}</ListGroupItem>
-                <ListGroupItem>Duration: {video.duration}</ListGroupItem>
-                <ListGroupItem>Date Created: {video.dateCreated}</ListGroupItem>
+                <ListGroupItem><strong>Category:</strong> {video.category}</ListGroupItem>
+                <ListGroupItem><strong>Duration:</strong> {msToTime(video.duration)}</ListGroupItem>
+                <ListGroupItem><strong>Date Created:</strong> {formatDate(video.dateCreated)}</ListGroupItem>
               </ListGroup>
               <Card.Body>
                 {
