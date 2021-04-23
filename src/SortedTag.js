@@ -11,11 +11,9 @@ import {ListGroup, ListGroupItem}  from 'react-bootstrap';
 import {Dropdown, DropdownButton}  from 'react-bootstrap';
 
 
-const Sorted= () => {
+const SortedTag = () => {
 
-  let {category, subcategory} = useParams();
-
-  console.log("Hello: ",category,subcategory);
+  let {tag} = useParams();
 
   const categories = () => {
 
@@ -71,18 +69,21 @@ const Sorted= () => {
    return self.indexOf(value) === index;
   }
 
-  const sort = (category, subcategory) => {
+  const sort = (tag) => {
     const sorted = []
     for( let i = 0; i < videos.length; i++ ){
-      const innerArray = videos[i].category.split("->");
-      if(subcategory === innerArray[category - 1]){
-        sorted.push(videos[i]);
+      // const innerArray = videos[i].category.split("->");
+      const innerArray = videos[i].tags;
+      console.log(innerArray,tag);
+      for( let j = 0; j < innerArray.length; j++ ){
+        if(tag.toLowerCase() === innerArray[j].toLowerCase()){
+          sorted.push(videos[i]);
+        }
       }
     }
+    console.log(sorted);
     return sorted;
   }
-
-  console.log(sort(category, subcategory));
 
   return (
     <div className="App" data-test="component-app">
@@ -109,7 +110,7 @@ const Sorted= () => {
       <Container>
       <Row>
         {
-          sort(category, subcategory).map((video,index) =>
+          sort(tag).map((video,index) =>
           <Col>
             <Card key={index+"c"} style={{ width: '18rem' }}>
               <Card.Img variant="top" src={video.thumbnail} />
@@ -141,4 +142,4 @@ const Sorted= () => {
   );
 }
 
-export default Sorted;
+export default SortedTag;

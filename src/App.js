@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import videos from "./videos.js";
 import './App.css';
 import Sorted from './Sorted.js'
+import SortedTag from './SortedTag.js'
 import Unsorted from './Sorted.js'
 
 import {Container, Row, Col} from 'react-bootstrap';
@@ -20,6 +21,7 @@ const App = () => {
     <Router>
         <Route path="/" exact component={Unsorted} />
         <Route path="/category/:category/:subcategory" component={Sorted} />
+        <Route path="/tag/:tag" component={SortedTag} />
       </Router>
     </div>
   );
